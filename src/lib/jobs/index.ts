@@ -6,6 +6,7 @@ import { postCall } from "../calls/post-call";
 import { getTelephony } from "../telephony/provider";
 import { replenishPool } from "../telephony/numbers";
 import { audit } from "../audit";
+import { sendDueReminders } from "../sms/reminders";
 
 /** Run `fn` only if no other server instance is running the same job right now. */
 async function exclusive<T>(name: string, fn: () => Promise<T>): Promise<T | "skipped"> {
@@ -104,6 +105,7 @@ async function housekeeping() {
 export const JOBS = {
   calendars: { everyMs: 10 * 60_000, run: () => refreshAllCalendars() },
   "post-calls": { everyMs: 5 * 60_000, run: () => sweepPostCalls() },
+  reminders: { everyMs: 60 * 60_000, run: () => sendDueReminders() },
   retention: { everyMs: 60 * 60_000, run: () => applyRetention() },
   "number-pool": { everyMs: 60 * 60_000, run: () => replenishPool() },
   "purge-companies": { everyMs: 6 * 60 * 60_000, run: () => purgeDeletedCompanies() },

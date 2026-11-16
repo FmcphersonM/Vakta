@@ -1,6 +1,6 @@
 import { and, count, desc, eq, ilike, or, type SQL } from "drizzle-orm";
 import { withTenant } from "../db/client";
-import { appointments, calls, jobTypes, leads, users, type LeadStatus } from "../db/schema";
+import { appointments, calls, jobTypes, leads, smsMessages, users, type LeadStatus } from "../db/schema";
 
 export const LEAD_STATUSES: LeadStatus[] = ["new", "booked", "quoted", "won", "lost"];
 
@@ -54,7 +54,13 @@ export async function getLead(companyId: string, id: string) {
       .where(lead.phone ? or(eq(calls.leadId, id), eq(calls.fromNumber, lead.phone)) : eq(calls.leadId, id))
       .orderBy(desc(calls.startedAt));
     const types = await tx.select().from(jobTypes).where(eq(jobTypes.active, true)).orderBy(jobTypes.sort);
-    return { lead, appts, calls: callRows, jobTypes: types };
+    const sms = await tx
+      .select()
+      .from(smsMessages)
+      .where(lead.phone ? or(eq(smsMessages.leadId, id), eq(smsMessages.toNumber, lead.phone)) : eq(smsMessages.leadId, id))
+      .orderBy(desc(smsMessages.createdAt))
+      .limit(20);
+    return { lead, appts, calls: callRows, jobTypes: types, sms };
   });
 }
 

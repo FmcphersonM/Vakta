@@ -111,7 +111,7 @@ export async function saveAgent(_: ActionState, form: FormData): Promise<ActionS
   const p = schema.safeParse(Object.fromEntries(form));
   if (!p.success) return { error: (await requireCompany()).t.common.error };
   const ctx = await saveCompany(
-    { ...p.data, smsSenderName: p.data.smsSenderName || null, recordingEnabled: form.get("recordingEnabled") === "on" },
+    { ...p.data, smsSenderName: p.data.smsSenderName || null, recordingEnabled: form.get("recordingEnabled") === "on", sendReminders: form.get("sendReminders") === "on" },
     "settings.agent",
   );
   return { ok: true, message: ctx.t.common.saved };

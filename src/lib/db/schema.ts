@@ -81,6 +81,7 @@ export const companies = pgTable("companies", {
   vipNumbers: text("vip_numbers").array().notNull().default([]),
   blockedNumbers: text("blocked_numbers").array().notNull().default([]),
   require2fa: boolean("require_2fa").notNull().default(false),
+  sendReminders: boolean("send_reminders").notNull().default(true),
   onboardingStep: text("onboarding_step").notNull().default("business"),
   trialEndsAt: ts("trial_ends_at").notNull().default(sql`now() + interval '14 days'`),
   subscriptionStatus: text("subscription_status").notNull().default("trialing"),
@@ -307,6 +308,7 @@ export const appointments = pgTable("appointments", {
   notes: text("notes"),
   status: text("status").$type<AppointmentStatus>().notNull().default("scheduled"),
   createdBy: text("created_by").$type<"ai" | "user">().notNull().default("ai"),
+  reminderSentAt: ts("reminder_sent_at"),
   createdAt: ts("created_at").notNull().defaultNow(),
   updatedAt: ts("updated_at").notNull().defaultNow(),
 });

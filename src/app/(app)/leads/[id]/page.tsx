@@ -135,6 +135,25 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
         </Card>
       </div>
 
+      {data.sms.length > 0 && (
+        <Card>
+          <CardHeader title={t.leads.smsHistory} />
+          <ul className="divide-y divide-slate-100">
+            {data.sms.map((m) => (
+              <li key={m.id} className="px-4 py-3 text-sm sm:px-5">
+                <p className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                  {fmt.dateTime(m.createdAt, locale, tz)} · {m.sender} → {fmt.phone(m.toNumber)}
+                  <Badge tone={m.status === "failed" || m.status === "undelivered" ? "red" : m.status === "delivered" ? "green" : "neutral"}>
+                    {t.leads.smsStatus[m.status] ?? m.status}
+                  </Badge>
+                </p>
+                <p className="mt-1 text-slate-800">{m.body}</p>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
       <Card>
         <CardHeader title={t.common.edit} />
         <div className="p-4 sm:p-5">

@@ -21,6 +21,10 @@ export const sms = {
     b.locale === "en"
       ? `Hi${b.name ? ` ${b.name.split(" ")[0]}` : ""}! Your site visit with ${b.companyName} has been moved to ${when(b.start, b)}.${contact(b)}`
       : `Hei${b.name ? ` ${b.name.split(" ")[0]}` : ""}! Befaringen hos ${b.companyName} er flyttet til ${when(b.start, b)}.${contact(b)}`,
+  reminder: (b: Base & { name: string | null; start: Date; address: string | null }) =>
+    b.locale === "en"
+      ? `Reminder: site visit from ${b.companyName} ${when(b.start, b)}${b.address ? `, ${b.address}` : ""}.${contact(b)}`
+      : `Påminnelse: befaring fra ${b.companyName} ${when(b.start, b)}${b.address ? `, ${b.address}` : ""}.${contact(b)}`,
   cancelled: (b: Base & { name: string | null; start: Date }) =>
     b.locale === "en"
       ? `Hi${b.name ? ` ${b.name.split(" ")[0]}` : ""}! Your site visit with ${b.companyName} on ${when(b.start, b)} has been cancelled.${contact(b)}`

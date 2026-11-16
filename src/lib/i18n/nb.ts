@@ -178,6 +178,8 @@ export const nb = {
     deleteConfirm: "Dette sletter henvendelsen, samtaler, opptak og SMS for dette telefonnummeret. Kan ikke angres.",
     outsideArea: "Utenfor tjenesteområdet",
     statusUpdated: "Status oppdatert",
+    smsHistory: "SMS sendt",
+    smsStatus: { queued: "I kø", sent: "Sendt", delivered: "Levert", failed: "Feilet", undelivered: "Ikke levert", simulated: "Simulert" } as Record<string, string>,
   },
   leadStatus: {
     new: "Ny",
@@ -302,6 +304,8 @@ export const nb = {
       retention: "Slett opptak etter (dager)",
       transcriptRetention: "Slett samtalelogg etter (dager)",
       language: "Hovedspråk",
+      reminders: "Send SMS-påminnelse til kunden dagen før befaringen",
+      remindersHint: "Færre glemte avtaler.",
       smsSender: "SMS-avsender",
       smsSenderHint: "Maks 11 tegn, bare bokstaver og tall (A–Z, 0–9). Vises som avsender på SMS til kunder.",
     },

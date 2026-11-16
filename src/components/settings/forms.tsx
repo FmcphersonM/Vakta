@@ -22,7 +22,7 @@ type C = Pick<
   Company,
   | "name" | "orgNumber" | "phone" | "email" | "baseAddress" | "serviceRadiusKm" | "servicePostcodes" | "trade"
   | "businessHours" | "befaringMinutes" | "bufferMinutes" | "minNoticeHours" | "bookingHorizonDays"
-  | "greetingText" | "agentInstructions" | "recordingEnabled" | "recordingRetentionDays" | "transcriptRetentionDays" | "locale" | "smsSenderName"
+  | "greetingText" | "agentInstructions" | "recordingEnabled" | "sendReminders" | "recordingRetentionDays" | "transcriptRetentionDays" | "locale" | "smsSenderName"
   | "forwardEmergencies" | "forwardOnRequest" | "forwardNumber" | "forwardHours" | "vipNumbers" | "blockedNumbers" | "notifyNumbers" | "notifyOn"
 >;
 
@@ -250,6 +250,7 @@ export function AgentForm({ c, locale }: { c: C; locale: Locale }) {
             <Input id="smsSenderName" name="smsSenderName" defaultValue={c.smsSenderName ?? ""} maxLength={11} pattern="[A-Za-z0-9 ]{0,11}" />
           </Field>
         </div>
+        <Toggle name="sendReminders" label={t.settings.agent.reminders} hint={t.settings.agent.remindersHint} defaultChecked={c.sendReminders} />
         <div className="border-t border-slate-100 pt-4">
           <label className="flex cursor-pointer items-start justify-between gap-4">
             <span>

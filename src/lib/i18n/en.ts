@@ -179,6 +179,8 @@ export const en: Dict = {
     deleteConfirm: "This deletes the lead, calls, recordings and SMS for this phone number. Cannot be undone.",
     outsideArea: "Outside service area",
     statusUpdated: "Status updated",
+    smsHistory: "Texts sent",
+    smsStatus: { queued: "Queued", sent: "Sent", delivered: "Delivered", failed: "Failed", undelivered: "Undelivered", simulated: "Simulated" } as Record<string, string>,
   },
   leadStatus: {
     new: "New",
@@ -303,6 +305,8 @@ export const en: Dict = {
       retention: "Delete recordings after (days)",
       transcriptRetention: "Delete transcripts after (days)",
       language: "Main language",
+      reminders: "Text the customer a reminder the day before",
+      remindersHint: "Fewer missed appointments.",
       smsSender: "SMS sender name",
       smsSenderHint: "Max 11 characters, letters and digits only (A–Z, 0–9). Shown as the sender of texts to customers.",
     },

@@ -90,6 +90,7 @@ export async function moveAppointment(input: {
         .set({
           startsAt: input.startsAt,
           endsAt: input.endsAt,
+          reminderSentAt: null, // a moved befaring gets a fresh reminder
           ...(input.assignedUserId ? { assignedUserId: input.assignedUserId } : {}),
         })
         .where(eq(appointments.id, input.id))
