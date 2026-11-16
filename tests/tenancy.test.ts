@@ -110,3 +110,13 @@ describe("login", () => {
     expect(await authenticate("finnes-ikke@example.no", "whatever-123", "10.0.0.9")).toEqual({ ok: false, reason: "invalid" });
   });
 });
+
+describe("rate limits", () => {
+  it("caps repeated attempts per key within the window", async () => {
+    const { overLimit } = await import("@/lib/auth/login");
+    const key = `test:${crypto.randomUUID()}`;
+    const results = [];
+    for (let i = 0; i < 4; i++) results.push(await overLimit(key, 3, 60_000));
+    expect(results).toEqual([false, false, false, true]);
+  });
+});

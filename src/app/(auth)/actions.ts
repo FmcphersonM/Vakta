@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { and, asc, eq, gt, isNull } from "drizzle-orm";
 import { z } from "zod";
-import { authenticate, verifySecondFactor } from "@/lib/auth/login";
+import { authenticate, MAX_MFA_FAILURES, overLimit, verifySecondFactor } from "@/lib/auth/login";
 import {
   completeMfa,
   createSession,
@@ -57,9 +57,18 @@ export async function loginAction(_: ActionState, form: FormData): Promise<Actio
 export async function verifyMfaAction(_: ActionState, form: FormData): Promise<ActionState> {
   const t = dict(await publicLocale());
   const cur = await getCurrentSession();
-  if (!cur) redirect("/login");
+  if (!cur || !cur.session.mfaPending) redirect("/login");
   const ok = await verifySecondFactor(cur.user.id, String(form.get("code") ?? ""));
-  if (!ok) return { error: t.auth.invalidCode };
+  if (!ok) {
+    // Brute-force guard: after 5 wrong codes the half-logged-in session is thrown away.
+    if (await overLimit(`mfa:${cur.user.id}`, MAX_MFA_FAILURES - 1, 15 * 60_000)) {
+      const token = (await cookies()).get(SESSION_COOKIE)?.value;
+      if (token) await deleteSession(token);
+      await clearSessionCookie();
+      return { error: t.auth.rateLimited };
+    }
+    return { error: t.auth.invalidCode };
+  }
   const { expiresAt } = await completeMfa(cur.session.id);
   const token = (await cookies()).get(SESSION_COOKIE)!.value;
   await setSessionCookie(token, expiresAt);
@@ -86,6 +95,7 @@ export async function signupAction(_: ActionState, form: FormData): Promise<Acti
   }
   if (passwordProblem(parsed.data.password)) return { error: t.auth.passwordTooShort };
   const ip = await clientIp();
+  if (await overLimit(`signup:${ip ?? "unknown"}`, 10, 3600_000)) return { error: t.auth.rateLimited };
   let ids: { companyId: string; userId: string };
   try {
     ids = await signup({ ...parsed.data, locale, ip });
@@ -109,7 +119,8 @@ export async function forgotPasswordAction(_: ActionState, form: FormData): Prom
   const t = dict(await publicLocale());
   const email = String(form.get("email") ?? "").trim().toLowerCase();
   const [user] = await getDb().select().from(users).where(eq(users.email, email)).limit(1);
-  if (user) {
+  // At most 3 reset e-mails per address per hour (same answer either way).
+  if (user && !(await overLimit(`reset:${email}`, 3, 3600_000))) {
     const token = randomToken(32);
     await getDb()
       .insert(passwordResets)

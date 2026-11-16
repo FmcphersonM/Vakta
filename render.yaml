@@ -1,0 +1,70 @@
+# Render Blueprint — everything in Frankfurt (EU).
+# In the Render dashboard: New → Blueprint → pick this repository.
+# Values marked `sync: false` are asked for when you create the Blueprint.
+services:
+  - type: web
+    name: vakta
+    runtime: node
+    region: frankfurt
+    plan: starter
+    buildCommand: corepack enable && pnpm install --frozen-lockfile --prod=false && pnpm build
+    preDeployCommand: pnpm db:migrate
+    startCommand: pnpm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vakta-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY # never change after launch: it unlocks stored calendar tokens and 2FA secrets
+        generateValue: true
+      - key: CRON_SECRET
+        generateValue: true
+      - key: APP_URL # e.g. https://app.vakta.no
+        sync: false
+      - key: NEXT_PUBLIC_APP_NAME
+        value: Vakta
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_API_KEY_SID
+        sync: false
+      - key: TWILIO_API_KEY_SECRET
+        sync: false
+      - key: TWILIO_NO_BUNDLE_SID
+        sync: false
+      - key: TWILIO_NO_ADDRESS_SID
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_PRICE_ID
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: MICROSOFT_CLIENT_ID
+        sync: false
+      - key: MICROSOFT_CLIENT_SECRET
+        sync: false
+      - key: SMTP_URL
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+
+databases:
+  - name: vakta-db
+    region: frankfurt
+    plan: basic-256mb
+    postgresMajorVersion: "16"
+    databaseName: vakta
+    user: vakta

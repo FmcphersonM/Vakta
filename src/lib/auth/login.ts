@@ -60,3 +60,20 @@ export async function verifySecondFactor(userId: string, code: string): Promise<
     .where(eq(users.id, userId));
   return true;
 }
+
+/**
+ * Generic fixed-window limiter backed by login_attempts (key stored in the
+ * email column). Returns true when the caller is over the limit.
+ */
+export async function overLimit(key: string, max: number, windowMs: number, record = true): Promise<boolean> {
+  const db = getDb();
+  const [r] = await db
+    .select({ n: count() })
+    .from(loginAttempts)
+    .where(and(eq(loginAttempts.email, key), gt(loginAttempts.createdAt, new Date(Date.now() - windowMs))));
+  if ((r?.n ?? 0) >= max) return true;
+  if (record) await db.insert(loginAttempts).values({ email: key, ip: null, success: false });
+  return false;
+}
+
+export const MAX_MFA_FAILURES = 5;
