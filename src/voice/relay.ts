@@ -11,10 +11,11 @@ import { CallSession, type VoiceTransport } from "./session";
 import { ClaudeBrain, type AgentBrain } from "./brain";
 import { productionDeps } from "./deps";
 import { env } from "../lib/env";
+import { fakeAiEnabled, ScriptedDemoBrain } from "./fake-brain";
 
 const wss = new WebSocketServer({ noServer: true, maxPayload: 256 * 1024 });
 
-let brainFactory: () => AgentBrain = () => new ClaudeBrain();
+let brainFactory: () => AgentBrain = () => (fakeAiEnabled() ? new ScriptedDemoBrain() : new ClaudeBrain());
 /** Tests replace Claude with a scripted brain. */
 export function setBrainFactory(f: (() => AgentBrain) | null) {
   brainFactory = f ?? (() => new ClaudeBrain());

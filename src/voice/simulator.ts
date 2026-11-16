@@ -7,6 +7,7 @@ import { randomToken } from "../lib/crypto";
 import { CallSession, type VoiceTransport } from "./session";
 import { ClaudeBrain, type AgentBrain } from "./brain";
 import { productionDeps } from "./deps";
+import { fakeAiEnabled, ScriptedDemoBrain } from "./fake-brain";
 
 export type SimEvent =
   | { type: "text"; token: string }
@@ -34,7 +35,7 @@ type Sim = { session: CallSession; transport: SimTransport; companyId: string; u
 const g = globalThis as unknown as { __vaktaSims?: Map<string, Sim>; __vaktaSimSweep?: NodeJS.Timeout };
 const sims = (g.__vaktaSims ??= new Map());
 
-let brainFactory: () => AgentBrain = () => new ClaudeBrain();
+let brainFactory: () => AgentBrain = () => (fakeAiEnabled() ? new ScriptedDemoBrain() : new ClaudeBrain());
 export function setSimulatorBrain(f: (() => AgentBrain) | null) {
   brainFactory = f ?? (() => new ClaudeBrain());
 }

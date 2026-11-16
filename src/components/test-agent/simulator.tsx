@@ -166,6 +166,7 @@ export function Simulator({ locale, aiReady }: { locale: Locale; aiReady: boolea
             window.speechSynthesis?.cancel();
           }}
           aria-pressed={speak}
+          aria-label={t.testAgent.voiceOn}
         >
           {speak ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
           <span className="hidden sm:inline">{t.testAgent.voiceOn}</span>

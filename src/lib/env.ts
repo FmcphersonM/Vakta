@@ -74,7 +74,7 @@ export function resetEnvCache() {
 }
 
 export const features = {
-  ai: () => Boolean(env().ANTHROPIC_API_KEY),
+  ai: () => Boolean(env().ANTHROPIC_API_KEY) || (process.env.VAKTA_FAKE_AI === "1" && env().NODE_ENV !== "production"),
   twilio: () =>
     env().TELEPHONY_PROVIDER !== "mock" &&
     Boolean(env().TWILIO_ACCOUNT_SID && env().TWILIO_AUTH_TOKEN),
