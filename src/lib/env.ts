@@ -32,6 +32,11 @@ const schema = z.object({
   STT_PROVIDER: z.enum(["Google", "Deepgram"]).default("Deepgram"),
   STT_MODEL_NB: z.string().optional(),
   SMS_DEFAULT_SENDER: z.string().default("Vakta"),
+  // Norwegian numbers need a regulatory bundle + address registered in Twilio.
+  TWILIO_NO_BUNDLE_SID: z.string().optional(),
+  TWILIO_NO_ADDRESS_SID: z.string().optional(),
+  TWILIO_NUMBER_TYPE: z.enum(["mobile", "local"]).default("mobile"),
+  NUMBER_POOL_SIZE: z.coerce.number().int().min(0).max(50).default(2),
 
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),

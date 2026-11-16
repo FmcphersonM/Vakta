@@ -284,6 +284,7 @@ export const calls = pgTable("calls", {
   transferredTo: text("transferred_to"),
   reviewedAt: ts("reviewed_at"),
   aiUsage: jsonb("ai_usage").$type<Record<string, number>>(),
+  postProcessedAt: ts("post_processed_at"),
   createdAt: ts("created_at").notNull().defaultNow(),
 });
 

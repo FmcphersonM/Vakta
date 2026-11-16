@@ -364,6 +364,7 @@ export const nb = {
       codeBusy: "Når du er opptatt",
       codeUnreachable: "Når mobilen er avslått / uten dekning",
       codeCancel: "Slå av all viderekobling",
+      codeAll: "Alt i ett: ikke svar, opptatt og avslått (anbefalt)",
       testCall: "Ring nummeret selv for å teste.",
       simulated: "Dette er et testnummer. Det virker når Twilio er koblet til.",
     },

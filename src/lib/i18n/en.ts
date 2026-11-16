@@ -364,6 +364,7 @@ export const en: Dict = {
       codeBusy: "When you're busy",
       codeUnreachable: "When your phone is off / no coverage",
       codeCancel: "Turn off all forwarding",
+      codeAll: "All in one: no answer, busy and off (recommended)",
       testCall: "Call the number yourself to test.",
       simulated: "This is a test number. It works once Twilio is connected.",
     },
