@@ -482,6 +482,7 @@ export const en: Dict = {
     finish: "Go to dashboard",
     skip: "Skip",
     timer: (min: number) => `About ${min} min left`,
+    extraHint: "One service per line.",
   },
   privacyPage: {
     title: (company: string) => `Privacy – calls with ${company}`,

@@ -482,6 +482,7 @@ export const nb = {
     finish: "Gå til oversikten",
     skip: "Hopp over",
     timer: (min: number) => `Ca. ${min} min igjen`,
+    extraHint: "Én tjeneste per linje.",
   },
   privacyPage: {
     title: (company: string) => `Personvern – samtaler med ${company}`,
