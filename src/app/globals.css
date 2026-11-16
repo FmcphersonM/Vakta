@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* "Fjord" — calm, trustworthy deep teal */
+  --color-brand-50: #f0f9f9;
+  --color-brand-100: #d9f0f0;
+  --color-brand-200: #b5e1e1;
+  --color-brand-300: #84cbcc;
+  --color-brand-400: #4fadb0;
+  --color-brand-500: #2f9195;
+  --color-brand-600: #23767b;
+  --color-brand-700: #1f5f64;
+  --color-brand-800: #1e4e52;
+  --color-brand-900: #1c4245;
+  --color-brand-950: #0b2a2d;
+
+  --color-canvas: #f5f7f8;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-canvas text-slate-900 antialiased;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-600;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+/* FullCalendar, toned to match the app */
+.fc {
+  --fc-border-color: #e2e8f0;
+  --fc-today-bg-color: #f0f9f9;
+  --fc-now-indicator-color: #dc2626;
+  --fc-event-border-color: transparent;
+  --fc-page-bg-color: #ffffff;
+  font-size: 0.8125rem;
+}
+.fc .fc-toolbar-title { font-size: 1rem; font-weight: 600; }
+.fc .fc-button { @apply rounded-lg border-slate-200 bg-white text-slate-700 shadow-none; text-transform: none; font-weight: 500; }
+.fc .fc-button:hover { @apply bg-slate-50 text-slate-900; }
+.fc .fc-button-primary:not(:disabled).fc-button-active { @apply border-brand-700 bg-brand-700 text-white; }
+.fc .fc-timegrid-slot { height: 2.25rem; }
+.fc .fc-event { @apply rounded-md px-1 shadow-sm; cursor: pointer; }
+.fc .fc-bg-event { opacity: 0.55; background: repeating-linear-gradient(45deg, #e2e8f0, #e2e8f0 6px, #f1f5f9 6px, #f1f5f9 12px); }
+.fc-col-header-cell-cushion { @apply py-2 font-medium text-slate-600; }
