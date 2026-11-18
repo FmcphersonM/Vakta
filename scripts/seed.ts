@@ -37,6 +37,15 @@ function workday(offset: number, hh: number, mm = 0) {
 }
 
 async function main() {
+  // --if-missing: used on first boot in hosting; never overwrites an existing demo.
+  if (process.argv.includes("--if-missing")) {
+    const existing = await withSystem((tx) => tx.select({ id: s.companies.id }).from(s.companies).where(eq(s.companies.slug, DEMO.slug)));
+    if (existing.length) {
+      console.log("✓ Demo company already exists – nothing to do");
+      await closeDb();
+      return;
+    }
+  }
   const passwordHash = await hashPassword(DEMO.password);
   const colleagueHash = await hashPassword("Kollega-passord-2026");
 
