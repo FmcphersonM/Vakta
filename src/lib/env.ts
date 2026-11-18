@@ -7,7 +7,8 @@ import { z } from "zod";
 const schema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   DATABASE_URL: z.string().min(1),
-  APP_URL: z.string().url().default("http://localhost:3000"),
+  // On Render the public address is provided automatically (RENDER_EXTERNAL_URL).
+  APP_URL: z.string().url().default(process.env.RENDER_EXTERNAL_URL ?? "http://localhost:3000"),
   NEXT_PUBLIC_APP_NAME: z.string().default("Vakta"),
   PORT: z.coerce.number().default(3000),
   SESSION_SECRET: z.string().min(32),
